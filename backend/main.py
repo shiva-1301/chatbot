@@ -25,29 +25,28 @@ app.add_middleware(
 client = Groq()
 
 class ChatRequest(BaseModel):
-    message: str
+    messages: list
 
 @app.post("/api/chat")
 async def chat_endpoint(request: ChatRequest):
     try:
+        system_message = {
+            "role": "system",
+            "content": (
+                "You are a helpful healthcare assistant. Maintain conversational context. "
+                "Provide general possible causes for symptoms. "
+                "Limit responses to 4-6 lines. "
+                "Avoid lengthy paragraphs and be concise. "
+                "Do NOT diagnose. Always advise consulting a doctor."
+            )
+        }
+        
+        # Combine system message with user history
+        conversation = [system_message] + request.messages
+
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a healthcare information assistant. "
-                        "Provide general possible causes for symptoms. "
-                        "Limit responses to 4-6 lines"
-                        "Avoid lengthy paragraphs and be concise"
-                        "Do NOT diagnose. Always advise consulting a doctor."
-                    )
-                },
-                {
-                    "role": "user",
-                    "content": request.message
-                }
-            ],
+            messages=conversation,
             temperature=0.3,
             max_tokens=150
         )

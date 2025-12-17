@@ -34,10 +34,23 @@ const ChatWidget = ({ autoOpen = false }) => {
         setIsLoading(true);
 
         try {
+            // Prepare history for API
+            // 1. Filter out the initial UI-only system greeting
+            // 2. Map 'bot' to 'assistant' for API compatibility
+            const history = messages
+                .filter(msg => msg.role !== 'system')
+                .map(msg => ({
+                    role: msg.role === 'bot' ? 'assistant' : msg.role,
+                    content: msg.content
+                }));
+
+            // 3. Add the new user message
+            history.push({ role: 'user', content: userMessage.content });
+
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: userMessage.content }),
+                body: JSON.stringify({ messages: history }),
             });
             const data = await response.json();
             setMessages(prev => [...prev, { role: 'bot', content: data.reply }]);
