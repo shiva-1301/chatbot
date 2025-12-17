@@ -74,7 +74,7 @@ const ChatWidget = ({ autoOpen = false }) => {
                                     <Bot size={20} />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-lg">HealthMate</h3>
+                                    <h3 className="font-semibold text-lg">HealthMate Bot</h3>
                                     <span className="text-xs text-blue-100 flex items-center gap-1">
                                         <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                                         Online
