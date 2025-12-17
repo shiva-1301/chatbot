@@ -51,7 +51,7 @@ async def chat_endpoint(request: ChatRequest):
             temperature=0.3,
             max_tokens=150
         )
-        return {"response": response.choices[0].message.content}
+        return {"reply": response.choices[0].message.content}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

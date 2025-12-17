@@ -40,7 +40,7 @@ const ChatWidget = ({ autoOpen = false }) => {
                 body: JSON.stringify({ message: userMessage.content }),
             });
             const data = await response.json();
-            setMessages(prev => [...prev, { role: 'bot', content: data.response }]);
+            setMessages(prev => [...prev, { role: 'bot', content: data.reply }]);
         } catch (error) {
             console.error("Error:", error);
             setMessages(prev => [...prev, { role: 'bot', content: "Sorry, I'm having trouble connecting to the server. Please try again later." }]);
